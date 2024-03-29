@@ -2,7 +2,7 @@
 - 👀 I’m interested in modding minecraft
 - 🌱 I’m currently learning java
 - 💞️ I’m looking to collaborate on/ i'm loner...
-- 📫 How to reach me? Discord : @Mocaera
+- 📫 How to reach me? Discord : @mocaera
 
 <!---
 Miqdamocta/Miqdamocta is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
