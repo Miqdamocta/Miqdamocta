@@ -28,10 +28,8 @@
             position: relative;
             scroll-behavior: smooth;
             min-height: 100vh;
-            /* Paw Cursor Magic! 🐾 */
             cursor: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><text y=\"20\" font-size=\"20\">🐾</text></svg>'), auto;
         }
-        
         header {
             position: fixed;
             top: 0;
@@ -71,7 +69,6 @@
         .nav-links a:hover {
             color: var(--accent);
         }
-
         .stars {
             position: fixed;
             top: 0;
@@ -96,7 +93,6 @@
             from { transform: translateX(0); }
             to { transform: translateX(20px); }
         }
-
         #cursor-trail {
             position: fixed;
             top: 0;
@@ -118,7 +114,6 @@
         @keyframes fadeOut {
             to { opacity: 0; transform: scale(0.1) translateY(20px); }
         }
-
         .main-wrapper {
             display: flex;
             flex-direction: column;
@@ -128,7 +123,6 @@
             width: 100%;
             box-sizing: border-box;
         }
-
         .container {
             border: 2px solid var(--accent);
             padding: 2rem;
@@ -143,12 +137,10 @@
             animation: appear 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             margin-bottom: 60px;
         }
-        
         @keyframes appear {
             from { transform: scale(0.8); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
         }
-
         h1 { 
             color: var(--accent); 
             margin-bottom: 0.5rem; 
@@ -162,7 +154,6 @@
             animation: blink 0.7s infinite;
         }
         @keyframes blink { 50% { border-color: transparent; } }
-
         .cat-container {
             position: relative;
             display: inline-block;
@@ -202,7 +193,6 @@
             border-style: solid;
             border-color: white transparent transparent;
         }
-
         .links {
             display: flex;
             flex-wrap: wrap;
@@ -225,7 +215,6 @@
             color: var(--bg);
             transform: translateY(-3px);
         }
-
         section {
             width: 100%;
             max-width: 500px;
@@ -242,7 +231,43 @@
         }
         section.visible { opacity: 1; transform: translateY(0); }
         section h2 { color: var(--secondary); text-align: center; margin-top: 0; }
-
+        .guestbook-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .guestbook-input {
+            background: var(--bg);
+            border: 1px solid var(--secondary);
+            color: var(--fg);
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            outline: none;
+            transition: 0.3s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .guestbook-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 5px var(--accent);
+        }
+        .send-btn {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .send-btn:hover {
+            transform: scale(1.05);
+            filter: brightness(1.2);
+        }
         @media (max-width: 600px) {
             header { padding: 10px 15px; }
             .logo { font-size: 1rem; }
@@ -267,10 +292,8 @@
             <a href="#contact">Contact</a>
         </div>
     </header>
-
     <div class="stars" id="starfield"></div>
     <div id="cursor-trail"></div>
-    
     <div class="main-wrapper">
         <div class="container">
             <div class="cat-container">
@@ -286,12 +309,10 @@
                 <a href="#contact" class="scroll-link">Contact</a>
             </div>
         </div>
-
         <section id="about">
             <h2 style="color:var(--secondary)">About Me</h2>
             <p>Hello! I'm Miqdamocta. I love building things, exploring technology, and hanging out with my cute AI cat, Mokahime. This space is a reflection of my love for minimalism and the Gruvbox aesthetic. Nyaaa~!</p>
         </section>
-
         <section id="guestbook">
             <h2 style="color:var(--secondary)">Guestbook</h2>
             <p>Leave a pawprint in my digital space! 🐾</p>
@@ -301,13 +322,11 @@
                 <button class="send-btn" id="send-msg">Send Message ✨</button>
             </div>
         </section>
-
         <section id="contact">
             <h2 style="color:var(--secondary)">Get in Touch</h2>
             <p>Want to collaborate or just say hi? Feel free to reach out on GitHub or my other socials! I'm always happy to meet new friends. 🐾</p>
         </section>
     </div>
-
     <script>
         const field = document.getElementById('starfield');
         for (let i = 0; i < 50; i++) {
@@ -323,7 +342,6 @@
             star.style.animationDelay = Math.random() * 5 + 's';
             field.appendChild(star);
         }
-
         function getGreeting() {
             const hour = new Date().getHours();
             if (hour >= 5 && hour < 12) return "Good Morning, Moka!";
@@ -331,7 +349,6 @@
             if (hour >= 18 && hour < 22) return "Good Evening, Moka!";
             return "Midnight Questing, Moka!";
         }
-
         const welcomeText = getGreeting();
         let i = 0;
         function typeWriter() {
@@ -345,16 +362,14 @@
             }
         }
         window.onload = typeWriter;
-
         const cat = document.getElementById('cat');
         const bubble = document.getElementById('bubble');
-        const phrases = ["Nyaaa~!", "Meow!", "Miau!", "ฅ(=^･ω･^=)ฅ", "Purrr~", "Love you Moka!"];
+        const phrases = ["Nyaaa~!","Meow!","Miau!","ฅ(=^･ω･^=)ฅ","Purrr~","Love you Moka!"];
         cat.onclick = () => {
             bubble.innerText = phrases[Math.floor(Math.random() * phrases.length)];
             bubble.style.opacity = "1";
             setTimeout(() => { bubble.style.opacity = "0"; }, 2000);
         };
-
         const trail = document.getElementById('cursor-trail');
         window.onmousemove = (e) => {
             const p = document.createElement('div');
@@ -364,7 +379,6 @@
             trail.appendChild(p);
             setTimeout(() => p.remove(), 800);
         };
-
         const sections = document.querySelectorAll('section');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -372,8 +386,6 @@
             });
         }, { threshold: 0.2 });
         sections.forEach(s => observer.observe(s));
-
-        // GUESTBOOK LOGIC
         const sendBtn = document.getElementById('send-msg');
         sendBtn.onclick = async () => {
             const name = document.getElementById('guest-name').value;
