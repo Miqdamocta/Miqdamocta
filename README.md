@@ -19,7 +19,6 @@
 
 ### 📬 Establish Connection
 - **Discord**: `@mocaera` 💬
-- **GitHub**: [@Miqdamocta](https://github.com/Miqdamocta) 🌟
 
 ---
 <p align="center"><i>"Minimalism is the ultimate sophistication... nyaaa~! ✨"</i></p>
