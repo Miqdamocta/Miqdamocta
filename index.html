@@ -10,6 +10,7 @@
             --fg: #ebdbb2;
             --accent: #fabd2f;
             --secondary: #83a598;
+            --dim: #504945;
         }
         body {
             background-color: var(--bg);
@@ -24,54 +25,113 @@
             padding: 20px;
             box-sizing: border-box;
             text-align: center;
+            overflow: hidden;
+            position: relative;
         }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle var(--duration) infinite ease-in-out;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 0.7; transform: scale(1.2); }
+        }
+
         .container {
             border: 2px solid var(--accent);
-            padding: 2rem;
-            border-radius: 15px;
+            padding: 2.5rem;
+            border-radius: 20px;
             background: #3c3836;
-            box-shadow: 10px 10px 0px var(--accent);
+            box-shadow: 12px 12px 0px var(--accent);
             width: 100%;
             max-width: 500px;
             box-sizing: border-box;
+            position: relative;
+            z-index: 1;
+            animation: appear 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        h1 { color: var(--accent); margin-bottom: 0.5rem; font-size: 1.8rem; }
-        p { font-size: 1.1rem; line-height: 1.5; }
-        .cat-emoji { font-size: 3rem; display: block; margin-bottom: 1rem; }
+        @keyframes appear {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        h1 { 
+            color: var(--accent); 
+            margin-bottom: 0.5rem; 
+            font-size: 1.8rem; 
+            text-shadow: 2px 2px 0px var(--dim);
+        }
+        p { font-size: 1.1rem; line-height: 1.6; }
+        
+        .cat-emoji { 
+            font-size: 3.5rem; 
+            display: block; 
+            margin-bottom: 1rem; 
+            cursor: pointer;
+            animation: float 3s ease-in-out infinite;
+            display: inline-block;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .cat-emoji:hover {
+            animation: bounce 0.5s ease infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
         .links {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 10px;
-            margin-top: 1.5rem;
+            gap: 12px;
+            margin-top: 2rem;
         }
         .links a {
             color: var(--secondary);
             text-decoration: none;
             border: 1px solid var(--secondary);
-            padding: 8px 15px;
-            border-radius: 5px;
-            transition: 0.3s;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-size: 0.9rem;
+            background: transparent;
         }
         .links a:hover {
             background: var(--secondary);
             color: var(--bg);
+            transform: translateY(-3px) rotate(2deg);
+            box-shadow: 0 5px 15px rgba(131, 165, 152, 0.4);
         }
+
         @media (max-width: 600px) {
-            .container {
-                padding: 1.5rem;
-                box-shadow: 5px 5px 0px var(--accent);
-            }
+            .container { padding: 1.5rem; box-shadow: 6px 6px 0px var(--accent); }
             h1 { font-size: 1.4rem; }
             p { font-size: 1rem; }
-            .cat-emoji { font-size: 2.5rem; }
+            .cat-emoji { font-size: 2.8rem; }
         }
     </style>
 </head>
 <body>
+    <div class="stars" id="starfield"></div>
     <div class="container">
-        <span class="cat-emoji">ฅ(=^･ω･^=)ฅ</span>
+        <span class="cat-emoji" title="Click me! Nyaa~!">ฅ(=^･ω･^=)ฅ</span>
         <h1>Welcome to Miqdamocta's Space!</h1>
         <p>A minimalist corner of the internet, <br> curated with help from Mokahime. Nyaaa~!</p>
         <div class="links">
@@ -80,5 +140,21 @@
             <a href="#">Contact</a>
         </div>
     </div>
+
+    <script>
+        const field = document.getElementById('starfield');
+        for (let i = 0; i < 50; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            const size = Math.random() * 3 + 'px';
+            star.style.width = size;
+            star.style.height = size;
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+            star.style.animationDelay = Math.random() * 5 + 's';
+            field.appendChild(star);
+        }
+    </script>
 </body>
 </html>
