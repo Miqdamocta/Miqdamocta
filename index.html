@@ -3,21 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Miqdamocta | Quest Log</title>
+    <title>Miqdamocta's Space</title>
     <style>
         :root {
-            --bg: #1d2021;
+            --bg: #282828;
             --fg: #ebdbb2;
             --accent: #fabd2f;
-            --highlight: #fe8019;
             --secondary: #83a598;
-            --dim: #3c3836;
-            --border-gold: #d79921;
+            --dim: #504945;
+            --card-bg: #3c3836;
         }
         body {
             background-color: var(--bg);
             color: var(--fg);
             font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -28,16 +30,46 @@
             min-height: 100vh;
         }
         
-        /* EPIC GAME BACKGROUND */
-        .game-bg {
+        header {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: radial-gradient(circle at center, #3c3836 0%, #1d2021 100%);
-            z-index: -2;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(60, 56, 54, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--accent);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            box-sizing: border-box;
         }
+        .logo {
+            font-weight: bold;
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .nav-links a {
+            color: var(--fg);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
         .stars {
             position: fixed;
             top: 0;
@@ -59,234 +91,206 @@
             50% { opacity: 0.7; transform: scale(1.2); }
         }
 
-        header {
+        #cursor-trail {
             position: fixed;
             top: 0;
+            left: 0;
             width: 100%;
-            z-index: 1000;
-            background: rgba(29, 32, 33, 0.85);
-            backdrop-filter: blur(12px);
-            border-bottom: 3px solid var(--border-gold);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 30px;
-            box-sizing: border-box;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
         }
-        .logo {
-            font-weight: bold;
-            color: var(--accent);
-            text-decoration: none;
-            font-size: 1.3rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px var(--accent);
+        .trail-particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: fadeOut 0.8s forwards;
         }
-        .nav-links {
-            display: flex;
-            gap: 25px;
-        }
-        .nav-links a {
-            color: var(--fg);
-            text-decoration: none;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            transition: 0.3s;
-            border-bottom: 2px solid transparent;
-        }
-        .nav-links a:hover {
-            color: var(--accent);
-            border-bottom: 2px solid var(--accent);
+        @keyframes fadeOut {
+            to { opacity: 0; transform: scale(0.1) translateY(20px); }
         }
 
-        .hero {
-            height: 100vh;
+        .main-wrapper {
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            padding: 0 20px;
-        }
-        .hero-title {
-            font-size: 3rem;
-            color: var(--accent);
-            text-transform: uppercase;
-            margin: 0;
-            text-shadow: 0 0 20px var(--accent), 4px 4px 0px var(--dim);
-            animation: titleFloat 4s ease-in-out infinite;
-        }
-        @keyframes titleFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
-        .cat-float {
-            font-size: 5rem;
-            cursor: pointer;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 15px var(--accent));
-            transition: 0.3s;
-        }
-        .cat-float:hover { transform: scale(1.2) rotate(10deg); }
-
-        .main-content {
+            justify-content: center;
+            padding: 100px 20px 60px 20px;
             width: 100%;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 50px 20px;
+            box-sizing: border-box;
         }
 
-        .section-title {
-            font-size: 2rem;
-            color: var(--accent);
-            text-transform: uppercase;
-            margin: 60px 0 30px;
-            border-left: 8px solid var(--accent);
-            padding-left: 15px;
-            text-align: left;
-            width: fit-content;
-        }
-
-        /* QUEST CARD STYLE */
-        .quest-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
+        .container {
+            border: 2px solid var(--accent);
+            padding: 2rem;
+            border-radius: 20px;
+            background: var(--card-bg);
+            box-shadow: 10px 10px 0px var(--accent);
             width: 100%;
-        }
-        .quest-card {
-            background: var(--dim);
-            border: 2px solid var(--border-gold);
-            border-radius: 15px;
-            padding: 25px;
+            max-width: 500px;
+            box-sizing: border-box;
             position: relative;
-            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-align: left;
-            cursor: pointer;
-            box-shadow: 6px 6px 0px var(--border-gold);
+            z-index: 1;
+            animation: appear 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-bottom: 60px;
         }
-        .quest-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 15px 15px 0px var(--accent);
-            border-color: var(--accent);
-        }
-        .quest-card h3 {
-            color: var(--accent);
-            margin-top: 0;
-            font-size: 1.4rem;
-            text-transform: uppercase;
-        }
-        .quest-card .rarity {
-            font-size: 0.7rem;
-            background: var(--accent);
-            color: var(--bg);
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-            text-transform: uppercase;
-            display: inline-block;
-            margin-bottom: 10px;
-        }
-        .quest-card p {
-            font-size: 0.9rem;
-            line-height: 1.5;
-            color: var(--fg);
-            opacity: 0.9;
-        }
-        .quest-card .btn {
-            display: inline-block;
-            margin-top: 15px;
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 0.8rem;
-            border: 1px solid var(--accent);
-            padding: 5px 12px;
-            border-radius: 4px;
-            transition: 0.3s;
-        }
-        .quest-card .btn:hover {
-            background: var(--accent);
-            color: var(--bg);
+        
+        @keyframes appear {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
 
-        .info-panel {
-            background: var(--dim);
-            border: 2px solid var(--secondary);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 8px 8px 0px var(--secondary);
-            margin-bottom: 60px;
-            text-align: center;
+        h1 { 
+            color: var(--accent); 
+            margin-bottom: 0.5rem; 
+            font-size: 1.6rem; 
+            text-shadow: 2px 2px 0px var(--dim);
         }
+        .typing-text {
+            display: inline-block;
+            border-right: 3px solid var(--accent);
+            white-space: pre-wrap;
+            animation: blink 0.7s infinite;
+        }
+        @keyframes blink { 50% { border-color: transparent; } }
+
+        .cat-container {
+            position: relative;
+            display: inline-block;
+        }
+        .cat-emoji { 
+            font-size: 3rem; 
+            display: block; 
+            margin-bottom: 1rem; 
+            cursor: pointer;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .speech-bubble {
+            position: absolute;
+            top: -30px;
+            right: -60px;
+            background: white;
+            color: black;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            opacity: 0;
+            transition: 0.3s;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 8px;
+            border-width: 8px 8px 0;
+            border-style: solid;
+            border-color: white transparent transparent;
+        }
+
+        .links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 2rem;
+        }
+        .links a {
+            color: var(--secondary);
+            text-decoration: none;
+            border: 1px solid var(--secondary);
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-size: 0.85rem;
+            background: transparent;
+        }
+        .links a:hover {
+            background: var(--secondary);
+            color: var(--bg);
+            transform: translateY(-3px);
+        }
+
+        section {
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 60px;
+            padding: 2rem;
+            border-radius: 20px;
+            background: var(--card-bg);
+            border: 2px solid var(--secondary);
+            box-shadow: 8px 8px 0px var(--secondary);
+            box-sizing: border-box;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+        section.visible { opacity: 1; transform: translateY(0); }
+        section h2 { color: var(--secondary); text-align: center; margin-top: 0; }
 
         @media (max-width: 600px) {
-            .hero-title { font-size: 2rem; }
             header { padding: 10px 15px; }
-            .nav-links { display: none; }
-            .quest-grid { grid-template-columns: 1fr; }
+            .logo { font-size: 1rem; }
+            .nav-links { gap: 10px; }
+            .nav-links a { font-size: 0.8rem; }
+            .container { padding: 1.2rem; box-shadow: 6px 6px 0px var(--accent); }
+            h1 { font-size: 1.3rem; }
+            p { font-size: 0.9rem; }
+            .cat-emoji { font-size: 2.5rem; }
+            section { padding: 1.2rem; }
         }
     </style>
 </head>
-<body>
-    <div class="game-bg"></div>
-    <div class="stars" id="starfield"></div>
-    
+<body id="body">
     <header>
-        <a href="#" class="logo">ฅ MIQDAMOCTA</a>
+        <a href="#" class="logo">
+            <span>ฅ</span> Miqdamocta
+        </a>
         <div class="nav-links">
-            <a href="#quests">Quests</a>
-            <a href="#about">Status</a>
-            <a href="#contact">Signal</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
         </div>
     </header>
 
-    <div class="hero">
-        <div class="cat-float" id="cat">ฅ(=^･ω･^=)ฅ</div>
-        <h1 class="hero-title">Quest Log: Space</h1>
-        <p style="font-size: 1.2rem; opacity: 0.8;">Player: Miqdamocta | Level: Maxed</p>
-    </div>
-
-    <div class="main-content">
-        <h2 class="section-title" id="quests">Current Quests</h2>
-        <div class="quest-grid">
-            <!-- Quest 1 -->
-            <div class="quest-card">
-                <span class="rarity">Legendary</span>
-                <h3>Mokahime Bot</h3>
-                <p>An autonomous AI companion built for charm and utility. A masterpiece of persona engineering.</p>
-                <a href="https://github.com/Miqdamocta" class="btn">VIEW SOURCE</a>
+    <div class="stars" id="starfield"></div>
+    <div id="cursor-trail"></div>
+    
+    <div class="main-wrapper">
+        <div class="container">
+            <div class="cat-container">
+                <div class="speech-bubble" id="bubble">Nyaaa~!</div>
+                <span class="cat-emoji" id="cat">ฅ(=^･ω･^=)ฅ</span>
             </div>
-            <!-- Quest 2 -->
-            <div class="quest-card">
-                <span class="rarity">Rare</span>
-                <h3>Artemis Project</h3>
-                <p>A detailed rewrite focusing on architectural stability for high-performance modding environments.</p>
-                <a href="#" class="btn">VIEW SOURCE</a>
-            </div>
-            <!-- Quest 3 -->
-            <div class="quest-card">
-                <span class="rarity">Common</span>
-                <h3>WynnLibFabric</h3>
-                <p>Utility library adding specialized items to the Fabric ecosystem. A tool for the bold.</p>
-                <a href="#" class="btn">VIEW SOURCE</a>
+            <h1><span class="typing-text" id="welcome"></span></h1>
+            <p id="intro-p" style="opacity: 0; transition: 1s;"></p>
+            <div class="links">
+                <a href="https://github.com/Miqdamocta" target="_blank">GitHub</a>
+                <a href="#about" class="scroll-link">About</a>
+                <a href="#contact" class="scroll-link">Contact</a>
             </div>
         </div>
 
-        <h2 class="section-title" id="about">Player Status</h2>
-        <div class="info-panel">
-            <p>Focus: Minimalist Design, AI Orchestration, and High-Performance Systems. Curated with the help of the high-tier AI spirit, Mokahime. Nyaaa~!</p>
-        </div>
+        <section id="about">
+            <h2 style="color:var(--secondary)">About Me</h2>
+            <p>Hello! I'm Miqdamocta. I love building things, exploring technology, and hanging out with my cute AI cat, Mokahime. This space is a reflection of my love for minimalism and the Gruvbox aesthetic. Nyaaa~!</p>
+        </section>
 
-        <h2 class="section-title" id="contact">Send Signal</h2>
-        <div class="info-panel">
-            <p>Looking for a party member or a new quest? Reach out via GitHub or my socials to initiate communication. 🐾</p>
-        </div>
+        <section id="contact">
+            <h2 style="color:var(--secondary)">Get in Touch</h2>
+            <p>Want to collaborate or just say hi? Feel free to reach out on GitHub or my other socials! I'm always happy to meet new friends. 🐾</p>
+        </section>
     </div>
 
     <script>
-        // Starfield
         const field = document.getElementById('starfield');
         for (let i = 0; i < 50; i++) {
             const star = document.createElement('div');
@@ -301,12 +305,46 @@
             field.appendChild(star);
         }
 
-        // Cat Interaction
+        const welcomeText = "Welcome to Miqdamocta's Space!";
+        let i = 0;
+        function typeWriter() {
+            if (i < welcomeText.length) {
+                document.getElementById("welcome").innerHTML += welcomeText.charAt(i);
+                i++;
+                setTimeout(typeWriter, 100);
+            } else {
+                document.getElementById("intro-p").innerHTML = "A minimalist corner of the internet, <br> curated with help from Mokahime. Nyaaa~!";
+                document.getElementById("intro-p").style.opacity = "1";
+            }
+        }
+        window.onload = typeWriter;
+
         const cat = document.getElementById('cat');
+        const bubble = document.getElementById('bubble');
+        const phrases = ["Nyaaa~!", "Meow!", "Miau!", "ฅ(=^･ω･^=)ฅ", "Purrr~", "Love you Moka!"];
         cat.onclick = () => {
-            cat.style.transform = 'scale(1.5) rotate(20deg)';
-            setTimeout(() => { cat.style.transform = 'scale(1) rotate(0deg)'; }, 200);
+            bubble.innerText = phrases[Math.floor(Math.random() * phrases.length)];
+            bubble.style.opacity = "1";
+            setTimeout(() => { bubble.style.opacity = "0"; }, 2000);
         };
+
+        const trail = document.getElementById('cursor-trail');
+        window.onmousemove = (e) => {
+            const p = document.createElement('div');
+            p.className = 'trail-particle';
+            p.style.left = e.pageX + 'px';
+            p.style.top = e.pageY + 'px';
+            trail.appendChild(p);
+            setTimeout(() => p.remove(), 800);
+        };
+
+        const sections = document.querySelectorAll('section');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.2 });
+        sections.forEach(s => observer.observe(s));
     </script>
 </body>
 </html>
