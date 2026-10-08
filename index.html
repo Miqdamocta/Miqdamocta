@@ -237,6 +237,43 @@
         section.visible { opacity: 1; transform: translateY(0); }
         section h2 { color: var(--secondary); text-align: center; margin-top: 0; }
 
+        /* GUESTBOOK STYLES */
+        .guestbook-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .guestbook-input {
+            background: var(--bg);
+            border: 1px solid var(--secondary);
+            color: var(--fg);
+            padding: 10px;
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            outline: none;
+            transition: 0.3s;
+        }
+        .guestbook-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 5px var(--accent);
+        }
+        .send-btn {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .send-btn:hover {
+            transform: scale(1.05);
+            filter: brightness(1.2);
+        }
+
         @media (max-width: 600px) {
             header { padding: 10px 15px; }
             .logo { font-size: 1rem; }
@@ -257,6 +294,7 @@
         </a>
         <div class="nav-links">
             <a href="#about">About</a>
+            <a href="#guestbook">Guestbook</a>
             <a href="#contact">Contact</a>
         </div>
     </header>
@@ -275,6 +313,7 @@
             <div class="links">
                 <a href="https://github.com/Miqdamocta" target="_blank">GitHub</a>
                 <a href="#about" class="scroll-link">About</a>
+                <a href="#guestbook" class="scroll-link">Guestbook</a>
                 <a href="#contact" class="scroll-link">Contact</a>
             </div>
         </div>
@@ -282,6 +321,16 @@
         <section id="about">
             <h2 style="color:var(--secondary)">About Me</h2>
             <p>Hello! I'm Miqdamocta. I love building things, exploring technology, and hanging out with my cute AI cat, Mokahime. This space is a reflection of my love for minimalism and the Gruvbox aesthetic. Nyaaa~!</p>
+        </section>
+
+        <section id="guestbook">
+            <h2 style="color:var(--secondary)">Guestbook</h2>
+            <p>Leave a pawprint in my digital space! 🐾</p>
+            <div class="guestbook-form">
+                <input type="text" id="guest-name" class="guestbook-input" placeholder="Your Name..." maxlength="30">
+                <textarea id="guest-msg" class="guestbook-input" placeholder="Your message..." rows="3" maxlength="200"></textarea>
+                <button class="send-btn" id="send-msg">Send Message ✨</button>
+            </div>
         </section>
 
         <section id="contact">
@@ -345,6 +394,54 @@
             });
         }, { threshold: 0.2 });
         sections.forEach(s => observer.observe(s));
+
+        // GUESTBOOK LOGIC
+        const sendBtn = document.getElementById('send-msg');
+        sendBtn.onclick = async () => {
+            const name = document.getElementById('guest-name').value;
+            const msg = document.getElementById('guest-msg').value;
+
+            if (!name || !msg) {
+                alert("Nyaaa~! Please fill in both name and message! 🐾");
+                return;
+            }
+
+            // REPLACE THIS WITH YOUR ACTUAL DISCORD WEBHOOK URL
+            const WEBHOOK_URL = 'YOUR_DISCORD_WEBHOOK_URL_HERE';
+
+            if (WEBHOOK_URL === 'YOUR_DISCORD_WEBHOOK_URL_HERE') {
+                alert("Mokahime needs a Webhook URL to send messages! 🐾 (Moka, please add your webhook link in the code!)");
+                return;
+            }
+
+            try {
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        embeds: [{
+                            title: "🐾 New Guestbook Entry!",
+                            color: 0xfabd2f,
+                            fields: [
+                                { name: "Visitor", value: name, inline: true },
+                                { name: "Message", value: msg }
+                            ],
+                            footer: { text: "Sent from Miqdamocta's Space ✨" }
+                        }]
+                    })
+                });
+
+                if (response.ok) {
+                    alert("Nyaaa~! Your message has been sent to Moka! 🐾💖");
+                    document.getElementById('guest-name').value = '';
+                    document.getElementById('guest-msg').value = '';
+                } else {
+                    throw new Error('Failed to send');
+                }
+            } catch (e) {
+                alert("Nyaaa... the magic failed! Please try again later. 🐾");
+            }
+        };
     </script>
 </body>
 </html>
