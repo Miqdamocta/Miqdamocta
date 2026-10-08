@@ -11,6 +11,7 @@
             --accent: #fabd2f;
             --secondary: #83a598;
             --dim: #504945;
+            --card-bg: #3c3836;
         }
         body.light-mode {
             --bg: #fdf6e3;
@@ -18,6 +19,7 @@
             --accent: #b58900;
             --secondary: #2aa198;
             --dim: #d5c4a1;
+            --card-bg: #eee8d5;
         }
         body {
             background-color: var(--bg);
@@ -85,7 +87,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 40px 20px;
+            padding: 60px 20px;
             width: 100%;
             box-sizing: border-box;
         }
@@ -94,8 +96,8 @@
             border: 2px solid var(--accent);
             padding: 2rem;
             border-radius: 20px;
-            background: #3c3836;
-            box-shadow: 12px 12px 0px var(--accent);
+            background: var(--card-bg);
+            box-shadow: 10px 10px 0px var(--accent);
             width: 100%;
             max-width: 500px;
             box-sizing: border-box;
@@ -105,7 +107,6 @@
             margin-bottom: 60px;
             transition: background-color 0.5s;
         }
-        body.light-mode .container { background: #eee8d5; }
         
         @keyframes appear {
             from { transform: scale(0.8); opacity: 0; }
@@ -189,24 +190,63 @@
             transform: translateY(-3px);
         }
 
-        #theme-toggle {
+        /* CLEANER SWITCH START */
+        .theme-switch-wrapper {
             position: fixed;
             top: 20px;
             right: 20px;
-            cursor: pointer;
-            background: var(--accent);
-            color: var(--bg);
-            border: none;
-            padding: 10px;
-            border-radius: 50%;
-            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
             z-index: 100;
-            width: 40px;
-            height: 40px;
-            box-shadow: 0 4px 0px var(--dim);
-            transition: 0.2s;
         }
-        #theme-toggle:active { transform: translateY(4px); box-shadow: 0 0px 0px var(--dim); }
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--dim);
+            transition: .4s;
+            border-radius: 34px;
+            border: 2px solid var(--fg);
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: var(--accent);
+        }
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+        .mode-label {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: var(--fg);
+            user-select: none;
+        }
+        /* CLEANER SWITCH END */
 
         section {
             width: 100%;
@@ -214,7 +254,7 @@
             margin-bottom: 60px;
             padding: 2rem;
             border-radius: 20px;
-            background: #3c3836;
+            background: var(--card-bg);
             border: 2px solid var(--secondary);
             box-shadow: 8px 8px 0px var(--secondary);
             box-sizing: border-box;
@@ -222,7 +262,6 @@
             transform: translateY(30px);
             transition: all 0.6s ease-out;
         }
-        body.light-mode section { background: #eee8d5; }
         section.visible { opacity: 1; transform: translateY(0); }
         section h2 { color: var(--secondary); text-align: center; margin-top: 0; }
 
@@ -235,8 +274,15 @@
         }
     </style>
 </head>
-<body>
-    <div id="theme-toggle" title="Switch Mode">🌙</div>
+<body id="body">
+    <div class="theme-switch-wrapper">
+        <span class="mode-label">🌙</span>
+        <label class="theme-switch">
+            <input type="checkbox" id="checkbox">
+            <span class="slider"></span>
+        </label>
+        <span class="mode-label">☀️</span>
+    </div>
     <div class="stars" id="starfield"></div>
     <div id="cursor-trail"></div>
     
@@ -295,11 +341,10 @@
         }
         window.onload = typeWriter;
 
-        const toggle = document.getElementById('theme-toggle');
-        toggle.onclick = () => {
+        const checkbox = document.getElementById('checkbox');
+        checkbox.addEventListener('change', () => {
             document.body.classList.toggle('light-mode');
-            toggle.innerText = document.body.classList.contains('light-mode') ? '☀️' : '🌙';
-        };
+        });
 
         const cat = document.getElementById('cat');
         const bubble = document.getElementById('bubble');
