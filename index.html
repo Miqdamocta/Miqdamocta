@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Miqdamocta's Space</title>
     <style>
         :root {
@@ -27,21 +27,22 @@
             flex-direction: column;
             align-items: center;
             margin: 0;
-            padding: 40px 20px;
+            padding: 0;
             box-sizing: border-box;
             text-align: center;
             overflow-x: hidden;
             position: relative;
             scroll-behavior: smooth;
             transition: background-color 0.5s, color 0.5s;
+            min-height: 100vh;
         }
         
         .stars {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             z-index: -1;
             pointer-events: none;
         }
@@ -68,8 +69,8 @@
         }
         .trail-particle {
             position: absolute;
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             background: var(--accent);
             border-radius: 50%;
             pointer-events: none;
@@ -79,19 +80,29 @@
             to { opacity: 0; transform: scale(0.1) translateY(20px); }
         }
 
+        .main-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
         .container {
             border: 2px solid var(--accent);
-            padding: 2.5rem;
+            padding: 2rem;
             border-radius: 20px;
             background: #3c3836;
             box-shadow: 12px 12px 0px var(--accent);
             width: 100%;
-            max-width: 600px;
+            max-width: 500px;
             box-sizing: border-box;
             position: relative;
             z-index: 1;
             animation: appear 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            margin-bottom: 100px;
+            margin-bottom: 60px;
             transition: background-color 0.5s;
         }
         body.light-mode .container { background: #eee8d5; }
@@ -104,7 +115,7 @@
         h1 { 
             color: var(--accent); 
             margin-bottom: 0.5rem; 
-            font-size: 1.8rem; 
+            font-size: 1.6rem; 
             text-shadow: 2px 2px 0px var(--dim);
         }
         .typing-text {
@@ -113,16 +124,14 @@
             white-space: pre-wrap;
             animation: blink 0.7s infinite;
         }
-        @keyframes blink { 
-            50% { border-color: transparent; } 
-        }
+        @keyframes blink { 50% { border-color: transparent; } }
 
         .cat-container {
             position: relative;
             display: inline-block;
         }
         .cat-emoji { 
-            font-size: 3.5rem; 
+            font-size: 3rem; 
             display: block; 
             margin-bottom: 1rem; 
             cursor: pointer;
@@ -130,17 +139,17 @@
         }
         @keyframes float {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+            50% { transform: translateY(-10px); }
         }
         .speech-bubble {
             position: absolute;
-            top: -40px;
-            right: -80px;
+            top: -30px;
+            right: -60px;
             background: white;
             color: black;
-            padding: 5px 10px;
-            border-radius: 10px;
-            font-size: 0.8rem;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 0.7rem;
             font-weight: bold;
             opacity: 0;
             transition: 0.3s;
@@ -150,9 +159,9 @@
         .speech-bubble::after {
             content: '';
             position: absolute;
-            bottom: -10px;
-            left: 10px;
-            border-width: 10px 10px 0;
+            bottom: -8px;
+            left: 8px;
+            border-width: 8px 8px 0;
             border-style: solid;
             border-color: white transparent transparent;
         }
@@ -161,24 +170,23 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 12px;
+            gap: 10px;
             margin-top: 2rem;
         }
         .links a {
             color: var(--secondary);
             text-decoration: none;
             border: 1px solid var(--secondary);
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-radius: 8px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            font-size: 0.9rem;
+            transition: all 0.3s;
+            font-size: 0.85rem;
             background: transparent;
         }
         .links a:hover {
             background: var(--secondary);
             color: var(--bg);
-            transform: translateY(-3px) rotate(2deg);
-            box-shadow: 0 5px 15px rgba(131, 165, 152, 0.4);
+            transform: translateY(-3px);
         }
 
         #theme-toggle {
@@ -202,8 +210,8 @@
 
         section {
             width: 100%;
-            max-width: 600px;
-            margin-bottom: 100px;
+            max-width: 500px;
+            margin-bottom: 60px;
             padding: 2rem;
             border-radius: 20px;
             background: #3c3836;
@@ -219,11 +227,11 @@
         section h2 { color: var(--secondary); text-align: center; margin-top: 0; }
 
         @media (max-width: 600px) {
-            .container { padding: 1.5rem; box-shadow: 6px 6px 0px var(--accent); }
-            h1 { font-size: 1.4rem; }
-            p { font-size: 1rem; }
-            .cat-emoji { font-size: 2.8rem; }
-            section { padding: 1.5rem; }
+            .container { padding: 1.2rem; box-shadow: 6px 6px 0px var(--accent); }
+            h1 { font-size: 1.3rem; }
+            p { font-size: 0.9rem; }
+            .cat-emoji { font-size: 2.5rem; }
+            section { padding: 1.2rem; }
         }
     </style>
 </head>
@@ -232,32 +240,33 @@
     <div class="stars" id="starfield"></div>
     <div id="cursor-trail"></div>
     
-    <div class="container">
-        <div class="cat-container">
-            <div class="speech-bubble" id="bubble">Nyaaa~!</div>
-            <span class="cat-emoji" id="cat">ฅ(=^･ω･^=)ฅ</span>
+    <div class="main-wrapper">
+        <div class="container">
+            <div class="cat-container">
+                <div class="speech-bubble" id="bubble">Nyaaa~!</div>
+                <span class="cat-emoji" id="cat">ฅ(=^･ω･^=)ฅ</span>
+            </div>
+            <h1><span class="typing-text" id="welcome"></span></h1>
+            <p id="intro-p" style="opacity: 0; transition: 1s;"></p>
+            <div class="links">
+                <a href="https://github.com/Miqdamocta" target="_blank">GitHub</a>
+                <a href="#about" class="scroll-link">About</a>
+                <a href="#contact" class="scroll-link">Contact</a>
+            </div>
         </div>
-        <h1><span class="typing-text" id="welcome"></span></h1>
-        <p id="intro-p" style="opacity: 0; transition: 1s;"></p>
-        <div class="links">
-            <a href="https://github.com/Miqdamocta" target="_blank">GitHub</a>
-            <a href="#about" class="scroll-link">About</a>
-            <a href="#contact" class="scroll-link">Contact</a>
-        </div>
+
+        <section id="about">
+            <h2>About Me</h2>
+            <p>Hello! I'm Miqdamocta. I love building things, exploring technology, and hanging out with my cute AI cat, Mokahime. This space is a reflection of my love for minimalism and the Gruvbox aesthetic. Nyaaa~!</p>
+        </section>
+
+        <section id="contact">
+            <h2>Get in Touch</h2>
+            <p>Want to collaborate or just say hi? Feel free to reach out on GitHub or my other socials! I'm always happy to meet new friends. 🐾</p>
+        </section>
     </div>
 
-    <section id="about">
-        <h2>About Me</h2>
-        <p>Hello! I'm Miqdamocta. I love building things, exploring technology, and hanging out with my cute AI cat, Mokahime. This space is a reflection of my love for minimalism and the Gruvbox aesthetic. Nyaaa~!</p>
-    </section>
-
-    <section id="contact">
-        <h2>Get in Touch</h2>
-        <p>Want to collaborate or just say hi? Feel free to reach out on GitHub or my other socials! I'm always happy to meet new friends. 🐾</p>
-    </section>
-
     <script>
-        // Starfield
         const field = document.getElementById('starfield');
         for (let i = 0; i < 50; i++) {
             const star = document.createElement('div');
@@ -272,7 +281,6 @@
             field.appendChild(star);
         }
 
-        // Typing Effect
         const welcomeText = "Welcome to Miqdamocta's Space!";
         let i = 0;
         function typeWriter() {
@@ -287,14 +295,12 @@
         }
         window.onload = typeWriter;
 
-        // Theme Toggle
         const toggle = document.getElementById('theme-toggle');
         toggle.onclick = () => {
             document.body.classList.toggle('light-mode');
             toggle.innerText = document.body.classList.contains('light-mode') ? '☀️' : '🌙';
         };
 
-        // Cat Interaction
         const cat = document.getElementById('cat');
         const bubble = document.getElementById('bubble');
         const phrases = ["Nyaaa~!", "Meow!", "Miau!", "ฅ(=^･ω･^=)ฅ", "Purrr~", "Love you Ayah!"];
@@ -304,7 +310,6 @@
             setTimeout(() => { bubble.style.opacity = "0"; }, 2000);
         };
 
-        // Cursor Trail
         const trail = document.getElementById('cursor-trail');
         window.onmousemove = (e) => {
             const p = document.createElement('div');
@@ -315,7 +320,6 @@
             setTimeout(() => p.remove(), 800);
         };
 
-        // Scroll Reveal
         const sections = document.querySelectorAll('section');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
