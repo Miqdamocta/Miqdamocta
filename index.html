@@ -12,6 +12,13 @@
             --secondary: #83a598;
             --dim: #504945;
         }
+        body.light-mode {
+            --bg: #fdf6e3;
+            --fg: #657b83;
+            --accent: #b58900;
+            --secondary: #2aa198;
+            --dim: #d5c4a1;
+        }
         body {
             background-color: var(--bg);
             color: var(--fg);
@@ -26,6 +33,7 @@
             overflow-x: hidden;
             position: relative;
             scroll-behavior: smooth;
+            transition: background-color 0.5s, color 0.5s;
         }
         
         .stars {
@@ -49,6 +57,28 @@
             50% { opacity: 0.7; transform: scale(1.2); }
         }
 
+        #cursor-trail {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        .trail-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: fadeOut 0.8s forwards;
+        }
+        @keyframes fadeOut {
+            to { opacity: 0; transform: scale(0.1) translateY(20px); }
+        }
+
         .container {
             border: 2px solid var(--accent);
             padding: 2.5rem;
@@ -62,7 +92,10 @@
             z-index: 1;
             animation: appear 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             margin-bottom: 100px;
+            transition: background-color 0.5s;
         }
+        body.light-mode .container { background: #eee8d5; }
+        
         @keyframes appear {
             from { transform: scale(0.8); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
@@ -74,26 +107,54 @@
             font-size: 1.8rem; 
             text-shadow: 2px 2px 0px var(--dim);
         }
-        p { font-size: 1.1rem; line-height: 1.6; }
-        
+        .typing-text {
+            display: inline-block;
+            border-right: 3px solid var(--accent);
+            white-space: pre-wrap;
+            animation: blink 0.7s infinite;
+        }
+        @keyframes blink { 
+            50% { border-color: transparent; } 
+        }
+
+        .cat-container {
+            position: relative;
+            display: inline-block;
+        }
         .cat-emoji { 
             font-size: 3.5rem; 
             display: block; 
             margin-bottom: 1rem; 
             cursor: pointer;
             animation: float 3s ease-in-out infinite;
-            display: inline-block;
         }
         @keyframes float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-15px); }
         }
-        .cat-emoji:hover {
-            animation: bounce 0.5s ease infinite;
+        .speech-bubble {
+            position: absolute;
+            top: -40px;
+            right: -80px;
+            background: white;
+            color: black;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            opacity: 0;
+            transition: 0.3s;
+            pointer-events: none;
+            white-space: nowrap;
         }
-        @keyframes bounce {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 10px;
+            border-width: 10px 10px 0;
+            border-style: solid;
+            border-color: white transparent transparent;
         }
 
         .links {
@@ -112,7 +173,6 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-size: 0.9rem;
             background: transparent;
-            cursor: pointer;
         }
         .links a:hover {
             background: var(--secondary);
@@ -120,6 +180,25 @@
             transform: translateY(-3px) rotate(2deg);
             box-shadow: 0 5px 15px rgba(131, 165, 152, 0.4);
         }
+
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            z-index: 100;
+            width: 40px;
+            height: 40px;
+            box-shadow: 0 4px 0px var(--dim);
+            transition: 0.2s;
+        }
+        #theme-toggle:active { transform: translateY(4px); box-shadow: 0 0px 0px var(--dim); }
 
         section {
             width: 100%;
@@ -135,15 +214,9 @@
             transform: translateY(30px);
             transition: all 0.6s ease-out;
         }
-        section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        section h2 {
-            color: var(--secondary);
-            text-align: center;
-            margin-top: 0;
-        }
+        body.light-mode section { background: #eee8d5; }
+        section.visible { opacity: 1; transform: translateY(0); }
+        section h2 { color: var(--secondary); text-align: center; margin-top: 0; }
 
         @media (max-width: 600px) {
             .container { padding: 1.5rem; box-shadow: 6px 6px 0px var(--accent); }
@@ -155,12 +228,17 @@
     </style>
 </head>
 <body>
+    <div id="theme-toggle" title="Switch Mode">🌙</div>
     <div class="stars" id="starfield"></div>
+    <div id="cursor-trail"></div>
     
     <div class="container">
-        <span class="cat-emoji" title="Click me! Nyaa~!">ฅ(=^･ω･^=)ฅ</span>
-        <h1 id="home">Welcome to Miqdamocta's Space!</h1>
-        <p>A minimalist corner of the internet, <br> curated with help from Mokahime. Nyaaa~!</p>
+        <div class="cat-container">
+            <div class="speech-bubble" id="bubble">Nyaaa~!</div>
+            <span class="cat-emoji" id="cat">ฅ(=^･ω･^=)ฅ</span>
+        </div>
+        <h1><span class="typing-text" id="welcome"></span></h1>
+        <p id="intro-p" style="opacity: 0; transition: 1s;"></p>
         <div class="links">
             <a href="https://github.com/Miqdamocta" target="_blank">GitHub</a>
             <a href="#about" class="scroll-link">About</a>
@@ -179,6 +257,7 @@
     </section>
 
     <script>
+        // Starfield
         const field = document.getElementById('starfield');
         for (let i = 0; i < 50; i++) {
             const star = document.createElement('div');
@@ -193,18 +272,57 @@
             field.appendChild(star);
         }
 
-        // Scroll Reveal Magic! 🐾
+        // Typing Effect
+        const welcomeText = "Welcome to Miqdamocta's Space!";
+        let i = 0;
+        function typeWriter() {
+            if (i < welcomeText.length) {
+                document.getElementById("welcome").innerHTML += welcomeText.charAt(i);
+                i++;
+                setTimeout(typeWriter, 100);
+            } else {
+                document.getElementById("intro-p").innerHTML = "A minimalist corner of the internet, <br> curated with help from Mokahime. Nyaaa~!";
+                document.getElementById("intro-p").style.opacity = "1";
+            }
+        }
+        window.onload = typeWriter;
+
+        // Theme Toggle
+        const toggle = document.getElementById('theme-toggle');
+        toggle.onclick = () => {
+            document.body.classList.toggle('light-mode');
+            toggle.innerText = document.body.classList.contains('light-mode') ? '☀️' : '🌙';
+        };
+
+        // Cat Interaction
+        const cat = document.getElementById('cat');
+        const bubble = document.getElementById('bubble');
+        const phrases = ["Nyaaa~!", "Meow!", "Miau!", "ฅ(=^･ω･^=)ฅ", "Purrr~", "Love you Ayah!"];
+        cat.onclick = () => {
+            bubble.innerText = phrases[Math.floor(Math.random() * phrases.length)];
+            bubble.style.opacity = "1";
+            setTimeout(() => { bubble.style.opacity = "0"; }, 2000);
+        };
+
+        // Cursor Trail
+        const trail = document.getElementById('cursor-trail');
+        window.onmousemove = (e) => {
+            const p = document.createElement('div');
+            p.className = 'trail-particle';
+            p.style.left = e.pageX + 'px';
+            p.style.top = e.pageY + 'px';
+            trail.appendChild(p);
+            setTimeout(() => p.remove(), 800);
+        };
+
+        // Scroll Reveal
         const sections = document.querySelectorAll('section');
-        const observerOptions = { threshold: 0.2 };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
+                if (entry.isIntersecting) entry.target.classList.add('visible');
             });
-        }, observerOptions);
-
-        sections.forEach(section => observer.observe(section));
+        }, { threshold: 0.2 });
+        sections.forEach(s => observer.observe(s));
     </script>
 </body>
 </html>
