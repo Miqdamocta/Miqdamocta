@@ -190,21 +190,22 @@
             transform: translateY(-3px);
         }
 
-        /* CLEANER SWITCH START */
+        /* ALIGNED SWITCH START */
         .theme-switch-wrapper {
             position: fixed;
             top: 20px;
             right: 20px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            gap: 8px;
             z-index: 100;
         }
         .theme-switch {
             position: relative;
             display: inline-block;
-            width: 50px;
-            height: 26px;
+            width: 46px;
+            height: 24px;
         }
         .theme-switch input {
             opacity: 0;
@@ -226,10 +227,10 @@
         .slider:before {
             position: absolute;
             content: "";
-            height: 18px;
-            width: 18px;
-            left: 4px;
-            bottom: 4px;
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
             background-color: white;
             transition: .4s;
             border-radius: 50%;
@@ -238,15 +239,17 @@
             background-color: var(--accent);
         }
         input:checked + .slider:before {
-            transform: translateX(24px);
+            transform: translateX(22px);
         }
         .mode-label {
-            font-size: 0.8rem;
-            font-weight: bold;
+            font-size: 1rem;
+            line-height: 1;
             color: var(--fg);
             user-select: none;
+            display: flex;
+            align-items: center;
         }
-        /* CLEANER SWITCH END */
+        /* ALIGNED SWITCH END */
 
         section {
             width: 100%;
@@ -302,12 +305,12 @@
         </div>
 
         <section id="about">
-            <h2>About Me</h2>
+            <h2 style="color:var(--secondary)">About Me</h2>
             <p>Hello! I'm Miqdamocta. I love building things, exploring technology, and hanging out with my cute AI cat, Mokahime. This space is a reflection of my love for minimalism and the Gruvbox aesthetic. Nyaaa~!</p>
         </section>
 
         <section id="contact">
-            <h2>Get in Touch</h2>
+            <h2 style="color:var(--secondary)">Get in Touch</h2>
             <p>Want to collaborate or just say hi? Feel free to reach out on GitHub or my other socials! I'm always happy to meet new friends. 🐾</p>
         </section>
     </div>
