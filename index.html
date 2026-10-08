@@ -21,6 +21,8 @@
             justify-content: center;
             min-height: 100vh;
             margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
             text-align: center;
         }
         .container {
@@ -29,23 +31,41 @@
             border-radius: 15px;
             background: #3c3836;
             box-shadow: 10px 10px 0px var(--accent);
-            max-width: 80%;
+            width: 100%;
+            max-width: 500px;
+            box-sizing: border-box;
         }
-        h1 { color: var(--accent); margin-bottom: 0.5rem; }
-        p { font-size: 1.2rem; }
+        h1 { color: var(--accent); margin-bottom: 0.5rem; font-size: 1.8rem; }
+        p { font-size: 1.1rem; line-height: 1.5; }
         .cat-emoji { font-size: 3rem; display: block; margin-bottom: 1rem; }
+        .links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 1.5rem;
+        }
         .links a {
             color: var(--secondary);
             text-decoration: none;
-            margin: 0 10px;
             border: 1px solid var(--secondary);
-            padding: 5px 10px;
+            padding: 8px 15px;
             border-radius: 5px;
             transition: 0.3s;
+            font-size: 0.9rem;
         }
         .links a:hover {
             background: var(--secondary);
             color: var(--bg);
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 1.5rem;
+                box-shadow: 5px 5px 0px var(--accent);
+            }
+            h1 { font-size: 1.4rem; }
+            p { font-size: 1rem; }
+            .cat-emoji { font-size: 2.5rem; }
         }
     </style>
 </head>
