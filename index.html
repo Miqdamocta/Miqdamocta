@@ -28,6 +28,8 @@
             position: relative;
             scroll-behavior: smooth;
             min-height: 100vh;
+            /* Paw Cursor Magic! 🐾 */
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><text y=\"20\" font-size=\"20\">🐾</text></svg>'), auto;
         }
         
         header {
@@ -84,11 +86,15 @@
             background: white;
             border-radius: 50%;
             opacity: 0;
-            animation: twinkle var(--duration) infinite ease-in-out;
+            animation: twinkle var(--duration) infinite ease-in-out, drift var(--drift-duration) infinite linear;
         }
         @keyframes twinkle {
             0%, 100% { opacity: 0; transform: scale(0.5); }
             50% { opacity: 0.7; transform: scale(1.2); }
+        }
+        @keyframes drift {
+            from { transform: translateX(0); }
+            to { transform: translateX(20px); }
         }
 
         #cursor-trail {
@@ -237,43 +243,6 @@
         section.visible { opacity: 1; transform: translateY(0); }
         section h2 { color: var(--secondary); text-align: center; margin-top: 0; }
 
-        /* GUESTBOOK STYLES */
-        .guestbook-form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        .guestbook-input {
-            background: var(--bg);
-            border: 1px solid var(--secondary);
-            color: var(--fg);
-            padding: 10px;
-            border-radius: 8px;
-            font-family: 'Courier New', Courier, monospace;
-            outline: none;
-            transition: 0.3s;
-        }
-        .guestbook-input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 5px var(--accent);
-        }
-        .send-btn {
-            background: var(--accent);
-            color: var(--bg);
-            border: none;
-            padding: 10px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-            font-family: 'Courier New', Courier, monospace;
-        }
-        .send-btn:hover {
-            transform: scale(1.05);
-            filter: brightness(1.2);
-        }
-
         @media (max-width: 600px) {
             header { padding: 10px 15px; }
             .logo { font-size: 1rem; }
@@ -308,7 +277,7 @@
                 <div class="speech-bubble" id="bubble">Nyaaa~!</div>
                 <span class="cat-emoji" id="cat">ฅ(=^･ω･^=)ฅ</span>
             </div>
-            <h1><span class="typing-text" id="welcome"></span></h1>
+            <h1 id="greeting-header"><span class="typing-text" id="welcome"></span></h1>
             <p id="intro-p" style="opacity: 0; transition: 1s;"></p>
             <div class="links">
                 <a href="https://github.com/Miqdamocta" target="_blank">GitHub</a>
@@ -350,11 +319,20 @@
             star.style.left = Math.random() * 100 + '%';
             star.style.top = Math.random() * 100 + '%';
             star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+            star.style.setProperty('--drift-duration', (Math.random() * 10 + 5) + 's');
             star.style.animationDelay = Math.random() * 5 + 's';
             field.appendChild(star);
         }
 
-        const welcomeText = "Welcome to Miqdamocta's Space!";
+        function getGreeting() {
+            const hour = new Date().getHours();
+            if (hour >= 5 && hour < 12) return "Good Morning, Moka!";
+            if (hour >= 12 && hour < 18) return "Good Afternoon, Moka!";
+            if (hour >= 18 && hour < 22) return "Good Evening, Moka!";
+            return "Midnight Questing, Moka!";
+        }
+
+        const welcomeText = getGreeting();
         let i = 0;
         function typeWriter() {
             if (i < welcomeText.length) {
@@ -400,20 +378,15 @@
         sendBtn.onclick = async () => {
             const name = document.getElementById('guest-name').value;
             const msg = document.getElementById('guest-msg').value;
-
             if (!name || !msg) {
                 alert("Nyaaa~! Please fill in both name and message! 🐾");
                 return;
             }
-
-            // REPLACE THIS WITH YOUR ACTUAL DISCORD WEBHOOK URL
             const WEBHOOK_URL = 'YOUR_DISCORD_WEBHOOK_URL_HERE';
-
             if (WEBHOOK_URL === 'YOUR_DISCORD_WEBHOOK_URL_HERE') {
-                alert("Mokahime needs a Webhook URL to send messages! 🐾 (Moka, please add your webhook link in the code!)");
+                alert("Mokahime needs a Webhook URL to send messages! 🐾");
                 return;
             }
-
             try {
                 const response = await fetch(WEBHOOK_URL, {
                     method: 'POST',
@@ -422,22 +395,16 @@
                         embeds: [{
                             title: "🐾 New Guestbook Entry!",
                             color: 0xfabd2f,
-                            fields: [
-                                { name: "Visitor", value: name, inline: true },
-                                { name: "Message", value: msg }
-                            ],
+                            fields: [{ name: "Visitor", value: name, inline: true }, { name: "Message", value: msg }],
                             footer: { text: "Sent from Miqdamocta's Space ✨" }
                         }]
                     })
                 });
-
                 if (response.ok) {
                     alert("Nyaaa~! Your message has been sent to Moka! 🐾💖");
                     document.getElementById('guest-name').value = '';
                     document.getElementById('guest-msg').value = '';
-                } else {
-                    throw new Error('Failed to send');
-                }
+                } else { throw new Error('Failed to send'); }
             } catch (e) {
                 alert("Nyaaa... the magic failed! Please try again later. 🐾");
             }
