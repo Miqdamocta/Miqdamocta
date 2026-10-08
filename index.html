@@ -12,18 +12,6 @@
             --secondary: #83a598;
             --dim: #504945;
             --card-bg: #3c3836;
-            --glow: rgba(250, 189, 47, 0.4);
-            --header-bg: rgba(60, 56, 54, 0.8);
-        }
-        body.light-mode {
-            --bg: #fdf6e3;
-            --fg: #657b83;
-            --accent: #b58900;
-            --secondary: #2aa198;
-            --dim: #d5c4a1;
-            --card-bg: #eee8d5;
-            --glow: rgba(181, 137, 0, 0.3);
-            --header-bg: rgba(238, 232, 213, 0.8);
         }
         body {
             background-color: var(--bg);
@@ -39,27 +27,24 @@
             overflow-x: hidden;
             position: relative;
             scroll-behavior: smooth;
-            transition: background-color 0.5s, color 0.5s;
             min-height: 100vh;
         }
         
-        /* HEADER STYLES */
         header {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             z-index: 1000;
-            background: var(--header-bg);
+            background: rgba(60, 56, 54, 0.9);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border-bottom: 2px solid var(--accent);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 20px;
+            padding: 12px 20px;
             box-sizing: border-box;
-            transition: background-color 0.5s;
         }
         .logo {
             font-weight: bold;
@@ -73,7 +58,7 @@
         .nav-links {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
         }
         .nav-links a {
             color: var(--fg);
@@ -83,56 +68,6 @@
         }
         .nav-links a:hover {
             color: var(--accent);
-        }
-
-        /* MODE SWITCH INTEGRATION */
-        .theme-switch-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .theme-switch {
-            position: relative;
-            display: inline-block;
-            width: 44px;
-            height: 22px;
-        }
-        .theme-switch input { opacity: 0; width: 0; height: 0; }
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: var(--dim);
-            transition: .4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            border-radius: 34px;
-            border: 1px solid var(--fg);
-        }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 14px;
-            width: 14px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            border-radius: 50%;
-        }
-        input:checked + .slider {
-            background-color: var(--accent);
-            box-shadow: 0 0 10px var(--glow);
-        }
-        input:checked + .slider:before { transform: translateX(20px); }
-        .mode-label {
-            font-size: 0.9rem;
-            color: var(--fg);
-            transition: 0.3s;
-            user-select: none;
-        }
-        .mode-label.active {
-            color: var(--accent);
-            text-shadow: 0 0 5px var(--glow);
-            transform: scale(1.2);
         }
 
         .stars {
@@ -201,7 +136,6 @@
             z-index: 1;
             animation: appear 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             margin-bottom: 60px;
-            transition: background-color 0.5s;
         }
         
         @keyframes appear {
@@ -305,7 +239,9 @@
 
         @media (max-width: 600px) {
             header { padding: 10px 15px; }
-            .nav-links { display: none; } /* Hide nav links on tiny screens to keep it clean */
+            .logo { font-size: 1rem; }
+            .nav-links { gap: 10px; }
+            .nav-links a { font-size: 0.8rem; }
             .container { padding: 1.2rem; box-shadow: 6px 6px 0px var(--accent); }
             h1 { font-size: 1.3rem; }
             p { font-size: 0.9rem; }
@@ -314,7 +250,7 @@
         }
     </style>
 </head>
-<body id="body">
+<body>
     <header>
         <a href="#" class="logo">
             <span>ฅ</span> Miqdamocta
@@ -322,14 +258,6 @@
         <div class="nav-links">
             <a href="#about">About</a>
             <a href="#contact">Contact</a>
-            <div class="theme-switch-wrapper">
-                <span class="mode-label active" id="label-moon">🌙</span>
-                <label class="theme-switch">
-                    <input type="checkbox" id="checkbox">
-                    <span class="slider"></span>
-                </label>
-                <span class="mode-label" id="label-sun">☀️</span>
-            </div>
         </div>
     </header>
 
@@ -390,21 +318,6 @@
             }
         }
         window.onload = typeWriter;
-
-        const checkbox = document.getElementById('checkbox');
-        const labelMoon = document.getElementById('label-moon');
-        const labelSun = document.getElementById('label-sun');
-        
-        checkbox.addEventListener('change', () => {
-            document.body.classList.toggle('light-mode');
-            if (document.body.classList.contains('light-mode')) {
-                labelSun.classList.add('active');
-                labelMoon.classList.remove('active');
-            } else {
-                labelMoon.classList.add('active');
-                labelSun.classList.remove('active');
-            }
-        });
 
         const cat = document.getElementById('cat');
         const bubble = document.getElementById('bubble');
